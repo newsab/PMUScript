@@ -1,15 +1,12 @@
 import pynmea2
 import serial
-import datetime
 
-class Rtk:
+class RTKStream:
 
-    def __init__ (self):
+    def __init__(self):
         self.raspiGNNS = serial.Serial('/dev/ttyAMA0', 115200)
 
     def getPosition(self):
-        #stream = raspiGNNS
-
         for sentence in self.raspiGNNS:
             try:
                 pNMEA = pynmea2.parse(sentence)
@@ -22,9 +19,8 @@ class Rtk:
                     lat = "{:.9f}".format(la)  
 
                     alt = pNMEA.altitude
-                    alt2 = pNMEA.altitude_units
 
-                    return lon, lat, alt, alt2
+                    return lon, lat, alt
             except:
                 pass
         
