@@ -2,37 +2,55 @@ import Pyro4
 import pynmea2
 import serial
 import datetime
-from MeasureLoop import Measure
 import threading
+from RTK import RTKStream
+import os
+import HackRF
+from FileWriter import WriteToFile
 
 @Pyro4.expose
 class PmuApp:
     
     def __init__ (self):
-        self.measure = Measure()
-        self.quitflag = False
+        self.rtk = RTKStream()
+        self.wtf = WriteToFile()
         self.quitlock = threading.Lock()
-
-        
-
-    def startMeasure(self):
+        self.t = threading.Thread(target=self.measure)
+        self.listToSend = []
+        self.quitflag = False
+		
+    def measure(self):
+        print"Ok jag kor"
         while True:
             with self.quitlock:
                 if self.quitflag:
+                    print"I'm done!"
                     return
-            self.measure.startMeasure()
+            lon, lat, alt = self.rtk.getPosition()
+            RFLvl = HackRF.GetDataFromHackRF()
+            time = str(datetime.datetime.now())
+            print time, lon, lat, alt, RFLvl
+            line = time, lon, lat, alt, RFLvl
+            self.listToSend.append(line)
+        
+            
+    def starta(self):
+        print"hej"
+        self.t.start() 
             
 
     def stopMeasure(self):
         with self.quitlock:
             self.quitflag = True
         self.t.join()
-        print "HEEEEJ!!!!!!!"
-        self.measure.stopMeasure()
+        print "HEEEEJ!!!!!!! Nu javlar funkar det fint! "
+        self.wtf.createFile(self.listToSend)
+        self.t._stop()
 
+    
 
-    t = threading.Thread(target=startMeasure)
-    t.start()    
+    
+      
 
 Pyro4.Daemon.serveSimple(
     {
