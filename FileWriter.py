@@ -7,13 +7,13 @@ class WriteToFile:
     def __init__(self):
         self.fileName = str(datetime.datetime.now())
         self.path = "/home/pi/pmuScript/Measurement/"
-        self.fullPath = os.path.join(self.path, self.fileName)       
-      
+        self.fullPath = os.path.join(self.path, self.fileName)
+
         
-    def createFile(self, listToRead):
+    def createFile(self, listToRead, frequecy):
         listToLoop = listToRead
         f = open(self.fullPath, "wt")
-        f.write('Drone Measurement, Frq: ' + str(HackRF.getFrequency()/1000000) + ' MHz')
+        f.write('Drone Measurement, Frq: ' + frequecy + ' MHz')
         f.write("\n \n \n")
         f.write(self.fullPath)
         f.write("\n \n")

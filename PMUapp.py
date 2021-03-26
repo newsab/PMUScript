@@ -4,7 +4,7 @@ import threading
 import Pyro4
 from RTK import RTKStream
 import os
-import HackRF
+from HackRF import PMUHackRF
 from FileWriter import WriteToFile
 
 @Pyro4.expose
@@ -17,8 +17,11 @@ class PmuApp:
         self.t = threading.Thread(target=self.measure)
         self.listToSend = []
         self.quitflag = False
+        self.frequency = 0.0
+        
 		
     def measure(self):
+        HackData =  PMUHackRF(self.frequency) 
         print"Ok jag kor"
         while True:
             with self.quitlock:
@@ -26,7 +29,7 @@ class PmuApp:
                     print"I'm done!"
                     return
             lon, lat, alt = self.rtk.getPosition()
-            RFLvl = HackRF.GetDataFromHackRF()
+            RFLvl = HackData.GetDataFromHackRF()
             time = str(datetime.datetime.now())
             print time, lon, lat, alt, RFLvl
             line = time, lon, lat, alt, RFLvl
@@ -35,11 +38,12 @@ class PmuApp:
             
         
             
-    def starta(self):
+    def starta(self, frequency):
+        self.frequency = frequency
         print"hej"
         self.quitflag = False
         if self.t.is_alive():
-            self.measure()
+            self.measure(fre)
             
         else:
             self.t.start()
@@ -51,7 +55,7 @@ class PmuApp:
             self.quitflag = True
         self.t.join()
         print "HEEEEJ!!!!!!! Nu javlar funkar det fint! "
-        self.wtf.createFile(self.listToSend)
+        self.wtf.createFile(self.listToSend, self.frequency)
         print "sucess"
         return self.listToSend
         
