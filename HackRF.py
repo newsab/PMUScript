@@ -12,6 +12,7 @@ hackrf.center_freq = hackrf_center_freq
 hackrf.lna_gain = 0
 hackrf.vga_gain = 36
 
+
 def GetDataFromHackRF():
 
 	samples = hackrf.read_samples(20000)		

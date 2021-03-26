@@ -1,8 +1,7 @@
-import Pyro4
-import pynmea2
 import serial
 import datetime
 import threading
+import Pyro4
 from RTK import RTKStream
 import os
 import HackRF
@@ -32,12 +31,20 @@ class PmuApp:
             print time, lon, lat, alt, RFLvl
             line = time, lon, lat, alt, RFLvl
             self.listToSend.append(line)
+
+            
         
             
     def starta(self):
         print"hej"
-        self.t.start() 
+        self.quitflag = False
+        if self.t.is_alive():
+            self.measure()
             
+        else:
+            self.t.start()
+            
+
 
     def stopMeasure(self):
         with self.quitlock:
@@ -45,9 +52,14 @@ class PmuApp:
         self.t.join()
         print "HEEEEJ!!!!!!! Nu javlar funkar det fint! "
         self.wtf.createFile(self.listToSend)
-        self.t._stop()
+        print "sucess"
+        return self.listToSend
+        
+        #self.t._stop()
 
     
+        
+   
 
     
       
