@@ -31,4 +31,7 @@ class PMUHackRF:
 		
 		return RFLvl
 
+	def killHackRF(self):
+		self.hackrf.__del__()
+
 	

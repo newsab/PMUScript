@@ -21,6 +21,7 @@ class PmuApp:
         
 		
     def measure(self):
+        global HackData 
         HackData =  PMUHackRF(self.frequency) 
         print"Ok jag kor"
         while True:
@@ -57,7 +58,9 @@ class PmuApp:
         print "HEEEEJ!!!!!!! Nu javlar funkar det fint! "
         self.wtf.createFile(self.listToSend, self.frequency)
         print "sucess"
+        HackData.killHackRF()
         return self.listToSend
+
         
         #self.t._stop()
 
