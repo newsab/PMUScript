@@ -41,15 +41,15 @@ class PmuApp:
             
     def starta(self, frequency):
         self.frequency = frequency
+        self.listToSend[:] = []
         print"hej"
-        self.quitflag = False
-        if self.t.is_alive():
-           return self.measure(fre)
-            
+        
+        if self.quitflag:
+            self.quitflag = False    
+            self.measure()
+           
         else:
-            self.t.start()
-            
-
+            self.t.start()        
 
     def stopMeasure(self):
         with self.quitlock:
@@ -61,8 +61,6 @@ class PmuApp:
         HackData.killHackRF()
         return self.listToSend
 
-        
-        #self.t._stop()
 
     def getStartPosition(self):
         print"Vart ar jag?"      

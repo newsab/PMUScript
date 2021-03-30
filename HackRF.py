@@ -33,5 +33,6 @@ class PMUHackRF:
 
 	def killHackRF(self):
 		self.hackrf.__del__()
+		del self
 
 	
