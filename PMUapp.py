@@ -34,7 +34,7 @@ class PmuApp:
             print time, lon, lat, alt, RFLvl
             line = time, lon, lat, alt, RFLvl
             self.listToSend.append(line)
-
+            
             
         
             
@@ -43,7 +43,7 @@ class PmuApp:
         print"hej"
         self.quitflag = False
         if self.t.is_alive():
-            self.measure(fre)
+           return self.measure(fre)
             
         else:
             self.t.start()
@@ -61,8 +61,16 @@ class PmuApp:
         
         #self.t._stop()
 
+    def getStartPosition(self):
+        print"Vart ar jag?"      
+        lon, lat, alt = self.rtk.getPosition()
+        time = str(datetime.datetime.now())
+        startposition = time, lon, lat, alt
+        print"Nu vet jag vart jag ar" + time, lon, lat, alt
+        return startposition
     
-        
+    def getListToSend(self):
+        return self.listToSend
    
 
     
