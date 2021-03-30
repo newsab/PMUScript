@@ -66,8 +66,8 @@ class PmuApp:
         print"Vart ar jag?"      
         lon, lat, alt = self.rtk.getPosition()
         time = str(datetime.datetime.now())
-        startposition = time, lon, lat, alt
-        print"Nu vet jag vart jag ar" + time, lon, lat, alt
+        startposition = lon, lat, alt
+        print"Nu vet jag vart jag ar" + lon, lat, alt
         return startposition
     
     def getListToSend(self):
